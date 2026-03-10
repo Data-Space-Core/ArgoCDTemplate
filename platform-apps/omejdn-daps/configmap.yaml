@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: omejdn-daps-config
+data:
+  OMEJDN_ISSUER: "https://dil.collab-cloud.eu/daps"
+  OMEJDN_FRONT_URL: "https://dil.collab-cloud.eu/daps"
+  OMEJDN_OPENID: "true"
+  OMEJDN_ACCEPT_AUDIENCE: "idsc:IDS_CONNECTORS_ALL"
+  OMEJDN_DEFAULT_AUDIENCE: "idsc:IDS_CONNECTORS_ALL"
+

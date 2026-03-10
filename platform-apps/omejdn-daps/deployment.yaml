@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: omejdn-daps
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: omejdn-daps
+  template:
+    metadata:
+      labels:
+        app: omejdn-daps
+    spec:
+      containers:
+        - name: omejdn-server
+          image: ghcr.io/fraunhofer-aisec/omejdn-server:<PINNED_TAG>
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 4567
+              name: http
+          envFrom:
+            - configMapRef:
+                name: omejdn-daps-config
+            - secretRef:
+                name: omejdn-daps-secret
+          readinessProbe:
+            httpGet:
+              path: /.well-known/oauth-authorization-server/daps
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /.well-known/oauth-authorization-server/daps
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+
