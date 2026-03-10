@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
         - name: omejdn-server
-          image: ghcr.io/fraunhofer-aisec/omejdn-server:<PINNED_TAG>
-          imagePullPolicy: IfNotPresent
+          image: ghcr.io/data-space-core/dsil-omejdn-server/omejdn-server
+          imagePullPolicy: Always
           ports:
             - containerPort: 4567
               name: http
