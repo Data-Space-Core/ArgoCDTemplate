@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/Data-Space-Core/ArgoCDTemplate.git
     targetRevision: main
-    path: omejdn-daps
+    path: platform-apps/omejdn-daps
   destination:
     server: https://kubernetes.default.svc
     namespace: omejdn-daps
