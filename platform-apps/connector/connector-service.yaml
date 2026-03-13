@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: omejdn-daps
+  name: connector
 spec:
   selector:
-    app: omejdn-daps
+    app: connector
   ports:
     - name: http
-      port: 80
-      targetPort: 4567
-
+      port: 8081
+      targetPort: 8081
+      

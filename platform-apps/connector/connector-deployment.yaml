@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: connector
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: connector
+  template:
+    metadata:
+      labels:
+        app: connector
+    spec:
+      containers:
+        - name: connector
+          image: ghcr.io/data-space-core/connector/stage:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8081
+              name: http
+          envFrom:
+            - configMapRef:
+                name: connector-config
+          env:
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: connector-secret
+                  key: POSTGRES_USER
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: connector-secret
+                  key: POSTGRES_PASSWORD
+            - name: SERVER_SSLv_KEY-STORE
+              value: file:///conf/default-connector-keystore.p12
+          volumeMounts:
+            - name: connector-config
+              mountPath: /config/config.json
+              subPath: config.json
+            - name: connector-keystore
+              mountPath: /conf/default-connector-keystore.p12
+              subPath: default-connector-keystore.p12
+            - name: connector-truststore
+              mountPath: /config/truststore.p12
+              subPath: truststore.p12
+          readinessProbe:
+            tcpSocket:
+              port: 8081
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: 8081
+            initialDelaySeconds: 30
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi
+      volumes:
+        - name: connector-config
+          secret:
+            secretName: connector-secret
+            items:
+              - key: config.json
+                path: config.json
+        - name: connector-keystore
+          secret:
+            secretName: connector-secret
+            items:
+              - key: default-connector-keystore.p12
+                path: default-connector-keystore.p12
+        - name: connector-truststore
+          secret:
+            secretName: connector-secret
+            items:
+              - key: truststore.p12
+                path: truststore.p12

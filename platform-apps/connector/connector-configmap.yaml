@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: connector-config
+data:
+  CONFIGURATION_PATH: /config/config.json
+  SERVER_PORT: "8081"
+
+  DAPS_URL: https://ouluds.ouludatalab.fi/auth
+  DAPS_TOKEN_URL: https://ouluds.ouludatalab.fi/auth/token
+  DAPS_KEY_URL: https://ouluds.ouludatalab.fi/auth/jwks.json
+  DAPS_INCOMING_DAT_DEFAULT_WELLKNOWN: /jwks.json
+
+  SPRING_DATASOURCE_URL: jdbc:postgresql://connector-database:5432/connectorbdb
+  SPRING_DATASOURCE_PLATFORM: postgres
+  SPRING_DATASOURCE_DRIVERCLASSNAME: org.postgresql.Driver
+  SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.PostgreSQLDialect
+  
